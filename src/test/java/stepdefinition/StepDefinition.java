@@ -11,14 +11,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.testng.asserts.SoftAssert;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import hooks.hooked;
 
 public class StepDefinition {
 	
-	WebDriver driver;
+	WebDriver driver=hooked.driver;
 	
 	static String getAlphaNumericString(int n)
     {
@@ -49,10 +51,7 @@ public class StepDefinition {
 	
 	@Given("User navigates to uniform website")
 	public void user_navigates_to_uniform_website() {
-		System.setProperty("webdriver.chrome.driver" ,".\\lib\\chromedriver.exe");
-		driver=new ChromeDriver();
 		driver.get("http://uniformm1.upskills.in/admin/index.php?route=common/login");
-		driver.manage().window().maximize();
 	}
 
 	@When("User enters {string} and {string}")
@@ -170,7 +169,7 @@ public class StepDefinition {
 	public void user_clicks_on_the_edit_button_of_a_random_row() {
 		int rnd=(int)((Math.random()*(20))+1);
 		String newXpath="//tbody/tr["+String.valueOf(rnd)+"]/td[7]/a";
-		driver.findElement(By.xpath(newXpath)).click();;	
+		driver.findElement(By.xpath(newXpath)).click();	
 	}
 
 	@When("Enters valid {string} and {string}")
@@ -192,36 +191,53 @@ public class StepDefinition {
 	@Given("User navigates to Gift Voucher Themes Section")
 	public void user_navigates_to_Gift_Voucher_Themes_Section() throws InterruptedException {
 	    driver.findElement(By.xpath("//*[@id='sale']")).click();
+	    Thread.sleep(3000);
 	    driver.findElement(By.xpath("//*[@id='sale']/ul/li[4]")).click();
-	    //driver.findElement(By.xpath("//*[@id='sale']/ul/li[4]/ul/li[2]/a")).click();
-	    String link=driver.findElement(By.xpath("//*[@id='sale']/ul/li[4]/ul/li[2]/a")).getAttribute("href");
-	    driver.navigate().to(link);
+	    Thread.sleep(3000);
+	    driver.findElement(By.xpath("//a[text()='Voucher Themes']")).click();
+//	    String link=driver.findElement(By.xpath("//*[@id='sale']/ul/li[4]/ul/li[2]/a")).getAttribute("href");
+//	    driver.navigate().to(link);
 	    Thread.sleep(5000);
 	}
-
-	@When("provides valid voucher theme name along with image")
-	public void provides_valid_voucher_theme_name_along_with_image() throws InterruptedException {
+	
+	@When("provides valid voucher theme name and clicks on image icon")
+	public void provides_valid_voucher_theme_name_and_clicks_on_image_icon() {
 		int xyz=(int)(Math.random()*32);
 		if(xyz==0)
 			xyz=1;
 		String test=getAlphaNumericString(xyz);
-		driver.findElement(By.xpath("//*[@id='form-theme-voucher']/div[1]/div/div/input")).sendKeys(test);
+		driver.findElement(By.xpath("//input[@placeholder='Voucher Theme Name']")).clear();
+		driver.findElement(By.xpath("//input[@placeholder='Voucher Theme Name']")).sendKeys(test);
 		driver.findElement(By.xpath("//*[@id='thumb-image']/img")).click();
-		driver.findElement(By.id("button-image")).click();
-//		Alert alert = driver.switchTo().alert();
-//		Thread.sleep(1000);
-		WebElement clk=driver.findElement(By.xpath("//*[@id='modal-image']/div/div/div[2]/div[2]/div[4]/a"));
-		Actions action=new Actions(driver);
-		action.moveToElement(clk).build().perform();
-		action.click().build().perform();
-//		alert.accept();
+		//driver.findElement(By.id("button-image")).click();
+	}
+
+	@Then("the two buttons edit and delete must appear")
+	public void the_two_buttons_edit_and_delete_must_appear() {
+	    try{
+	    	Thread.sleep(3000);
+	    	boolean edit_btn= driver.findElement(By.id("button-image")).isDisplayed();
+	    	boolean delete_btn= driver.findElement(By.id("button-clear")).isDisplayed();
+//	    	System.out.println("Edit btn val : "+edit_btn);
+//	    	System.out.println("Clear btn val : "+delete_btn);
+	    	boolean expected_value=true;
+	    	SoftAssert sa = new SoftAssert();
+	    	sa.assertEquals(edit_btn, expected_value);
+	    	sa.assertEquals(delete_btn, expected_value);
+	    	sa.assertAll();
+	    }
+	    catch(Exception e)
+	    {
+	    	System.out.println("Some Error occured after clicking image icon");
+	    }
+	}
+	
+	@When("User clicks on edit button of corresponding row")
+	public void user_clicks_on_edit_button_of_corresponding_row() throws InterruptedException {
+		int rnd=(int)((Math.random()*(20))+1);
+		String newXpath="//tbody/tr["+String.valueOf(rnd)+"]/td[3]/a";
+		driver.findElement(By.xpath(newXpath)).click();	
 		Thread.sleep(3000);
 	}
-
-	@Then("the data must be added to gift voucher theme list followed by sucess message")
-	public void the_data_must_be_added_to_gift_voucher_theme_list_followed_by_sucess_message() {
-		String msg=driver.findElement(By.xpath("//div[@class='alert alert-success']")).getText();
-	    System.out.println(msg);
-	}
-
+	
 }

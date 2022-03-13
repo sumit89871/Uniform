@@ -9,10 +9,10 @@ import cucumber.api.junit.Cucumber;
 
 @CucumberOptions(
 		features="src/test/java/features",
-		glue= {"stepdefinition"}
-		,tags={"not @Marketing","not @Check","not @Gift"}
+		glue= {"stepdefinition","hooks"}
+		//,tags={"not @Marketing","not @Gift"}
+		,monochrome=true
 		,plugin = {"pretty"}
-		//
 		//,dryRun=true
 		)
 

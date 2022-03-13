@@ -67,13 +67,12 @@ Feature: Login
       | Campaign Name | Tracking Code |
       | Ibm Campaign  | qwerty123     |
 
-  @Check
+  @Gift
   Scenario: Verify the add button functionality of Gift Voucher themes section with valid inputs
     Given User navigates to Gift Voucher Themes Section
     When User clicks on add button icon
-    And provides valid voucher theme name along with image
-    And Clicks on save button
-    Then the data must be added to gift voucher theme list followed by sucess message
+    And provides valid voucher theme name and clicks on image icon
+    Then the two buttons edit and delete must appear
     
   @Gift
   Scenario: Verify the delete button functionality of Gift Voucher Theme section 
@@ -83,12 +82,11 @@ Feature: Login
     And Click Yes on the popup
     Then the data must be deleted and sucess message should appear
     
-  @Check2
+  @Gift
 	Scenario: Verify the edit button functionality of Gift Voucher Theme section 
 		Given User navigates to Gift Voucher Themes Section
 		When User clicks on edit button of corresponding row
-		And provides valid voucher theme name along with image
-		And Clicks on save button
-    Then the row must be edited and added to database along with proper massage
+		And provides valid voucher theme name and clicks on image icon
+		Then the two buttons edit and delete must appear
 		
     
