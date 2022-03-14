@@ -12,7 +12,7 @@ import cucumber.api.junit.Cucumber;
 		glue= {"stepdefinition","hooks"}
 		//,tags={"not @Marketing","not @Gift"}
 		,monochrome=true
-		,plugin = {"pretty"}
+		,plugin = {"pretty","html:report/cucumber-pretty"}
 		//,dryRun=true
 		)
 
